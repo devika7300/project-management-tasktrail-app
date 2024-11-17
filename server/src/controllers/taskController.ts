@@ -29,6 +29,7 @@ export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  console.log("task created api data" + req.body);
   const {
     title,
     description,
