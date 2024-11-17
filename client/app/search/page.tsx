@@ -34,7 +34,7 @@ const Search = () => {
       <Header name="Search" />
       <div>
         <input
-          type="text"
+          type="search"
           placeholder="Search..."
           className="w-1/2 rounded border p-3 shadow"
           onChange={handleSearch}

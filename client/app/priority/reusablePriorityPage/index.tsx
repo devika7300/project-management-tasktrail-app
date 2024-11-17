@@ -77,7 +77,10 @@ const ReusablePriorityPage = ({ priority }: Props) => {
   const [view, setView] = useState("list");
   const [isModalNewTaskOpen, setIsModalNewTaskOpen] = useState(false);
   const { data: currentUser } = useGetAuthUserQuery({});
-  const userId = currentUser?.userDetails?.userId ?? null;
+  // const userId = currentUser?.user?.userId ?? null;
+  const userId = currentUser?.user?.userId ? parseInt(currentUser.user.userId) : null;
+  console.log("current user:", currentUser);
+  // console.log("User Details:", currentUser?.userDetails);
   const {
     data: tasks,
     isLoading,
@@ -85,13 +88,16 @@ const ReusablePriorityPage = ({ priority }: Props) => {
   } = useGetTasksByUserQuery(userId || 0, {
     skip: userId === null,
   });
-
+  console.log("User ID:", userId);
+  console.log("Tasks Loaded:", tasks);
+  console.log("Loading:", isLoading);
+  console.log("Error:", isTasksError);
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   const filteredTasks = tasks?.filter(
     (task: Task) => task.priority === priority,
   );
-
+ 
   if (isTasksError || !tasks) return <div>Error fetching tasks</div>;
 
   return (

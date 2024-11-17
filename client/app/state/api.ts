@@ -163,6 +163,14 @@ export const api = createApi({
           search: build.query<SearchResults, string>({
             query: (query) => `search?query=${query}`,
           }),
+          // Add this inside the endpoints in the createApi call
+          deleteTask: build.mutation<{ success: boolean; id: number }, number>({
+            query: (taskId) => ({
+              url: `tasks/${taskId}`,
+              method: 'DELETE',
+            }),
+            invalidatesTags: (result, error, taskId) => [{ type: 'Tasks', id: taskId }],
+          }),
     }),
 });
 
@@ -175,4 +183,6 @@ export const { useGetProjectsQuery,
   useGetUsersQuery,
   useGetTeamsQuery,
   useGetTasksByUserQuery,
-  useGetAuthUserQuery } = api;
+  useGetAuthUserQuery,
+  useDeleteTaskMutation,
+   } = api;

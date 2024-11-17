@@ -21,9 +21,66 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
   const [authorUserId, setAuthorUserId] = useState("");
   const [assignedUserId, setAssignedUserId] = useState("");
   const [projectId, setProjectId] = useState("");
-  // console.log(id);
+
+  const [error, setError] = useState("");  // State to hold error messages
+  const [successMessage, setSuccessMessage] = useState("");
+
+
+  const clearForm = () => {
+    setTitle("");
+    setDescription("");
+    setStatus(Status.ToDo);
+    setPriority(Priority.Backlog);
+    setTags("");
+    setStartDate("");
+    setDueDate("");
+    setAuthorUserId("");
+    setAssignedUserId("");
+    setProjectId("");
+  };
+
   const handleSubmit = async () => {
     if (!title || !authorUserId || !(id !== null || projectId)) return;
+  //   // Clear previous errors
+  // setError('');
+
+  // // Check each field individually
+  // if (!title) {
+  //   setError('Title is required.');
+  //   return;
+  // }
+  // if (!description) {
+  //   setError('Description is required.');
+  //   return;
+  // }
+  // if (!status) {
+  //   setError('Please select a status.');
+  //   return;
+  // }
+  // if (!priority) {
+  //   setError('Please select a priority.');
+  //   return;
+  // }
+  // if (!startDate) {
+  //   setError('Start date is required.');
+  //   return;
+  // }
+  // if (!dueDate) {
+  //   setError('Due date is required.');
+  //   return;
+  // }
+  // if (!authorUserId) {
+  //   setError('Author user ID is required.');
+  //   return;
+  // }
+  // if (!assignedUserId) {
+  //   setError('Assigned user ID is required.');
+  //   return;
+  // }
+  // if (!(id !== null || projectId)) {
+  //   setError('Project ID is required.');
+  //   return;
+  // }
 
     const formattedStartDate = formatISO(new Date(startDate), {
       representation: "complete",
@@ -31,19 +88,43 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
     const formattedDueDate = formatISO(new Date(dueDate), {
       representation: "complete",
     });
-
-    await createTask({
-      title,
-      description,
-      status,
-      priority,
-      tags,
-      startDate: formattedStartDate,
-      dueDate: formattedDueDate,
-      authorUserId: parseInt(authorUserId),
-      assignedUserId: parseInt(assignedUserId),
-      projectId: id !== null ? Number(id) : Number(projectId),
-    });
+    try {
+      await createTask({
+        title,
+        description,
+        status,
+        priority,
+        tags,
+        startDate: formattedStartDate,
+        dueDate: formattedDueDate,
+        authorUserId: parseInt(authorUserId),
+        assignedUserId: parseInt(assignedUserId),
+        projectId: id !== null ? Number(id) : Number(projectId),
+      });
+      clearForm();
+      setSuccessMessage("Task successfully added!");
+      setTimeout(() => {
+        setSuccessMessage(""); // Clear success message after 3 seconds
+        onClose(); // Optionally close the modal after success
+      }, 1500);  // Close the modal after successful creation
+    } catch (error) {
+      setError("Failed to create task. Please try again.");  // Set error message to be displayed
+      console.error("Failed to create task:", error);
+    }
+    
+    // await createTask({
+    //   title,
+    //   description,
+    //   status,
+    //   priority,
+    //   tags,
+    //   startDate: formattedStartDate,
+    //   dueDate: formattedDueDate,
+    //   authorUserId: parseInt(authorUserId),
+    //   assignedUserId: parseInt(assignedUserId),
+    //   projectId: id !== null ? Number(id) : Number(projectId),
+    // });
+    
   };
 
   const isFormValid = () => {
@@ -65,6 +146,9 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
           handleSubmit();
         }}
       >
+        {error && <div className="text-red-500">{error}</div>}  
+        {successMessage && <div className="text-green-500">{successMessage}</div>}
+        {/* Form inputs go here */}
         <input
           type="text"
           className={inputStyles}
@@ -82,9 +166,13 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
           <select
             className={selectStyles}
             value={status}
-            onChange={(e) =>
-              setStatus(Status[e.target.value as keyof typeof Status])
-            }
+            onChange={(e) =>{
+              //  setStatus(Status[e.target.value as keyof typeof Status]);
+                const statusKey = Object.keys(Status).find(key => Status[key as keyof typeof Status] === e.target.value);
+                if (statusKey) {
+                  setStatus(Status[statusKey as keyof typeof Status]);
+                }
+             } }
           >
             <option value="">Select Status</option>
             <option value={Status.ToDo}>To Do</option>

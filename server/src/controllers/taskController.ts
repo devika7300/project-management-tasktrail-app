@@ -112,3 +112,21 @@ export const getUserTasks = async (
       .json({ message: `Error retrieving user's tasks: ${error.message}` });
   }
 };
+
+// In your taskController.js
+export const deleteTask = async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+  try {
+    await prisma.task.delete({
+      where: {
+        id: Number(taskId),
+      },
+    });
+    res.status(200).json({ success: true, id: Number(taskId) });
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+    res.status(500).json({ success: false, message: "Failed to delete task" });
+  }
+};
+
+

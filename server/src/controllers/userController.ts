@@ -32,6 +32,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const postUser = async (req: Request, res: Response) => {
+  console.log(req.body); 
   try {
     const {
       username,

@@ -1,9 +1,9 @@
-import { useGetTasksQuery, useUpdateTaskStatusMutation } from"@/app/state/api";
-import React from "react";
+import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskStatusMutation } from"@/app/state/api";
+import React, { useEffect, useRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Task as TaskType } from "@/app/state/api";
-import { EllipsisVertical, MessageSquareMore, Plus } from "lucide-react";
+import { EllipsisVertical, MessageSquareMore, Plus, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import Image from "next/image";
 
@@ -126,6 +126,10 @@ type TaskProps = {
 };
 
 const Task = ({ task }: TaskProps) => {
+  const [deleteTask] = useDeleteTaskMutation();
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task.id },
@@ -134,6 +138,25 @@ const Task = ({ task }: TaskProps) => {
     }),
   }));
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      await deleteTask(task.id);
+      setShowMenu(false);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+  
   const taskTagsSplit = task.tags ? task.tags.split(",") : [];
 
   const formattedStartDate = task.startDate
@@ -172,9 +195,11 @@ const Task = ({ task }: TaskProps) => {
         isDragging ? "opacity-50" : "opacity-100"
       }`}
     >
+    
+     
       {task.attachments && task.attachments.length > 0 && (
         <Image
-          src={`https://pm-tt-s3-images.s3.us-east-1.amazonaws.com/${task.attachments[0].fileURL}`}
+          src={`/${task.attachments[0].fileURL}`}
           alt={task.attachments[0].fileName}
           width={400}
           height={200}
@@ -197,10 +222,29 @@ const Task = ({ task }: TaskProps) => {
               ))}
             </div>
           </div>
-          <button className="flex h-6 w-4 flex-shrink-0 items-center justify-center dark:text-neutral-500">
+          {/* <button className="flex h-6 w-4 flex-shrink-0 items-center justify-center dark:text-neutral-500">
             <EllipsisVertical size={26} />
-          </button>
-        </div>
+          </button> */}
+         <div className="relative">
+        <button onClick={() => setShowMenu(!showMenu)} className="p-1">
+          <EllipsisVertical size={20} />
+        </button>
+        {showMenu && (
+          <div ref={menuRef} className="absolute right-0 top-full mt-1 w-40 rounded-md shadow-lg bg-white z-50">
+            <ul className="py-1 text-sm text-gray-700">
+              <li>
+                <button
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                  onClick={handleDelete}
+                >
+                  Delete Task <Trash2 className="inline ml-2 size-5"/>
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      </div>
 
         <div className="my-3 flex justify-between">
           <h4 className="text-md font-bold dark:text-white">{task.title}</h4>
@@ -226,7 +270,7 @@ const Task = ({ task }: TaskProps) => {
             {task.assignee && (
               <Image
                 key={task.assignee.userId}
-                src={`https://pm-tt-s3-images.s3.us-east-1.amazonaws.com/${task.assignee.profilePictureUrl!}`}
+                src={`/${task.assignee.profilePictureUrl!}`}
                 alt={task.assignee.username}
                 width={30}
                 height={30}
@@ -236,7 +280,7 @@ const Task = ({ task }: TaskProps) => {
             {task.author && (
               <Image
                 key={task.author.userId}
-                src={`https://pm-tt-s3-images.s3.us-east-1.amazonaws.com/${task.author.profilePictureUrl!}`}
+                src={`/${task.author.profilePictureUrl!}`}
                 alt={task.author.username}
                 width={30}
                 height={30}

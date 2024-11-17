@@ -2,6 +2,7 @@ import React from "react";
 import { Authenticator } from "@aws-amplify/ui-react";
 import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
+// import { useGetTeamsQuery } from "./state/api";
 
 Amplify.configure({
   Auth: {
@@ -12,6 +13,8 @@ Amplify.configure({
     },
   },
 });
+
+
 
 const formFields = {
   signUp: {
@@ -27,6 +30,17 @@ const formFields = {
       label: "Email",
       inputProps: { type: "email", required: true },
     },
+    // team: {
+    //   order: 5,
+    //   type: 'select',
+    //   placeholder: "Select a team",
+    //   label: "Team",
+    //   inputProps: { required: true },
+    //   selectOptions: teams ? teams.map(team => ({
+    //     label: team.teamName,
+    //     value: team.teamId.toString(),
+    //   })) : [],
+    // },
     password: {
       order: 3,
       placeholder: "Enter your password",
@@ -43,6 +57,10 @@ const formFields = {
 };
 
 const AuthProvider = ({ children }: any) => {
+//   const { data: teams, isFetching, isError } = useGetTeamsQuery();
+//   // Handle errors or fetching states as needed
+// if (isFetching) return <div>Loading teams...</div>;
+// if (isError) return <div>Error fetching teams</div>;
   return (
     <div>
       <Authenticator formFields={formFields}>
