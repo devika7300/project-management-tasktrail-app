@@ -1,4 +1,4 @@
-# Project Management Dashboard Application
+# TASKTRAIL - Project Management Dashboard Application
 
 ## Description
 This project aims to create a robust Project Management Dashboard using a combination of modern web technologies and cloud services. It features a **React-based** frontend using **Next.js** for SSR (Server-Side Rendering), styled with **Tailwind CSS** and **Material UI Data Grid** for complex data presentations. The backend runs on **Node.js** with **Express**, and **PostgreSQL** as the database managed through **Prisma ORM**. It leverages various **AWS** services for serverless computing, authentication, storage, and more.
