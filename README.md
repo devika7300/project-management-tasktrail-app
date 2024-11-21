@@ -29,3 +29,4 @@ This project aims to create a robust Project Management Dashboard using a combin
 
 <img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Home-page.png">
 <img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Projects-Tasks.png">
+<img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Dark-mode.png">
