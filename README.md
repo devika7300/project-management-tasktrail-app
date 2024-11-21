@@ -26,6 +26,8 @@ This project aims to create a robust Project Management Dashboard using a combin
 - **AWS Lambda** - Event-driven, serverless computing service.
 - **AWS Cognito** - Provides user identity and data synchronization to facilitate user authentication and mobile data security.
 
+### Project Walkthrough Video:
+https://drive.google.com/file/d/1ZQ7uBcFOq9foVWZeYYQmtC75U-OjbYRd/view?usp=sharing
 
 <img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Home-page.png">
 <img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Projects-Tasks.png">
