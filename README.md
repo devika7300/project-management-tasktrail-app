@@ -27,5 +27,5 @@ This project aims to create a robust Project Management Dashboard using a combin
 - **AWS Cognito** - Provides user identity and data synchronization to facilitate user authentication and mobile data security.
 
 
-<img width="800" align="center" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Home-page.png">
-<img width="800" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Projects-Tasks.png">
+<img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Home-page.png">
+<img width="1000" src="https://github.com/devika7300/project-management-tasktrail-app/blob/master/Projects-Tasks.png">
